@@ -1,3 +1,41 @@
+<#
+    .SYNOPSIS
+    Deletes all rows in a provided Azure Table that belong to a provided Partition Key.
+
+    .DESCRIPTION
+    Deletes all rows in a provided Azure Table that belong to a provided Partition Key.
+
+    .PARAMETER PartitionKeyArray
+    Specifies the Partition Key(s) to which the rows belong.
+
+    .PARAMETER Table
+    The Azure Table object obtained via the Az.Storage module.
+
+    .INPUTS
+    None.
+
+    .OUTPUTS
+    None.
+
+    .EXAMPLE
+    If you haven't already, first connect to Azure with the Az.Accounts module:
+    PS> Connect-AzAccount
+    
+    Then, get the table in question using the Az.Storage module:
+    PS> $TableName = "myTable"
+    PS> $ResourceGroupName = "myResourceGroup"
+    PS> $StorageAccountName = "myStorageAccount"
+    PS> $StorageAccount = Get-AzStorageAccount -Name $StorageAccountName -ResourceGroupName $ResourceGroupName
+    PS> $Context = $StorageAccount.Context
+    PS> $Table = (Get-AzStorageTable -Name $TableName -Context $Context).CloudTable
+
+    Next, define your Partition Key(s):
+    PS> $PartitionKeyArray = "myKey1", "myKey2"
+
+    Finally, run this script:
+    PS> .\Remove-AzTableRowsByPartitionKey.ps1 -PartitionKeyArray $PartitionKeyArray -Table $Table
+#>
+
 param(
     [string[]]$PartitionKeyArray,
     [Microsoft.Azure.Cosmos.Table.CloudTable]$Table
